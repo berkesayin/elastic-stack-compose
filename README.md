@@ -29,6 +29,8 @@ The Elastic tools used for this application:
 
 ## Compose Configuration <a name="compose"></a>
 
+As of 8.0, security is enabled by default. `setup` container is used here to make sure the certificate CA setup is established correctly. Having `security enabled` is a recommended practice and should not be disabled.
+
 Build and run the application:
 
 ```sh
