@@ -75,6 +75,8 @@ Output:
 }
 ```
 
+So, `Elasticsearch` is accessed using `localhost:9200`.
+
 The password `Bucket-Sevenfold8-Residue` comes from the value defined at `.env` file and used at `docker-compose.yml` file.
 
 ### Services
@@ -85,6 +87,19 @@ The password `Bucket-Sevenfold8-Residue` comes from the value defined at `.env` 
 - metricbeat
 - filebeat
 - logtstash
+
+Notice, in `environment` section for `kibana` service, `ELASTICSEARCH_HOSTS=https://es01:9200` is specified.
+
+Navigate to `http://localhost:5601` for `kibana`.
+
+- Username: elastic
+- Password: Bucket-Sevenfold8-Residue (for my definition)
+
+![img](./assets/kibana1.png)
+
+`http://localhost:5601/app/home#/`
+
+![img](./assets/kibana2.png)
 
 ### Images
 
