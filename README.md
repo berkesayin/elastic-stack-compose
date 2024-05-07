@@ -3,7 +3,9 @@
 ## Contents
 
 - [Elastic Stack Tools](#elastic-stack)
-- [Compose Configuration](#compose)
+- [Compose Configuration And Usage](#compose)
+- [Services](#services)
+- [Details](#details)
 
 ## Elastic Stack <a name="elastic-stack"></a>
 
@@ -27,7 +29,7 @@ The Elastic tools used for this application:
 └── metricbeat.yml
 ```
 
-## Compose Configuration <a name="compose"></a>
+## Compose Configuration And Usage <a name="compose"></a>
 
 As of 8.0, security is enabled by default. `setup-c` container is used here to make sure the certificate CA setup is established correctly. Having `security enabled` is a recommended practice and should not be disabled.
 
@@ -37,7 +39,20 @@ Build and run the application:
 docker compose up --build
 ```
 
+## Services <a name="services"></a>
+
+- setup
+- es01
+- kibana
+- metricbeat
+- filebeat
+- logtstash
+
+### Setup Service (setup)
+
 The `setup-c` container exits on purpose after it completes generating the certs and passwords.
+
+### Elasticsearch Service (es01)
 
 Copy the `ca.crt` out of the `es01-c` container:
 
@@ -55,40 +70,31 @@ curl --cacert /tmp/ca.crt -u elastic:Bucket-Sevenfold8-Residue https://localhost
 
 Output:
 
-```sh
+```json
 {
-  "name" : "es01",
-  "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "idRIZmHHSi6D8b3MEJNy7Q",
-  "version" : {
-    "number" : "8.7.1",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "f229ed3f893a515d590d0f39b05f68913e2d9b53",
-    "build_date" : "2023-04-27T04:33:42.127815583Z",
-    "build_snapshot" : false,
-    "lucene_version" : "9.5.0",
-    "minimum_wire_compatibility_version" : "7.17.0",
-    "minimum_index_compatibility_version" : "7.0.0"
+  "name": "es01",
+  "cluster_name": "docker-cluster",
+  "cluster_uuid": "idRIZmHHSi6D8b3MEJNy7Q",
+  "version": {
+    "number": "8.7.1",
+    "build_flavor": "default",
+    "build_type": "docker",
+    "build_hash": "f229ed3f893a515d590d0f39b05f68913e2d9b53",
+    "build_date": "2023-04-27T04:33:42.127815583Z",
+    "build_snapshot": false,
+    "lucene_version": "9.5.0",
+    "minimum_wire_compatibility_version": "7.17.0",
+    "minimum_index_compatibility_version": "7.0.0"
   },
-  "tagline" : "You Know, for Search"
+  "tagline": "You Know, for Search"
 }
 ```
 
-So, `Elasticsearch` is accessed using `localhost:9200`.
+So, `Elasticsearch` is accessed using `localhost:9200`. The password `Bucket-Sevenfold8-Residue` comes from the value defined at `.env` file and used at `docker-compose.yml` file.
 
-The password `Bucket-Sevenfold8-Residue` comes from the value defined at `.env` file and used at `docker-compose.yml` file.
+### Kibana Service (kibana)
 
-### Services
-
-- setup
-- es01
-- kibana
-- metricbeat
-- filebeat
-- logtstash
-
-Notice, in `environment` section for `kibana` service, `ELASTICSEARCH_HOSTS=https://es01:9200` is specified.
+In `environment` section for `kibana` service, `ELASTICSEARCH_HOSTS=https://es01:9200` is specified.
 
 Navigate to `http://localhost:5601` for `kibana`.
 
@@ -100,6 +106,15 @@ Navigate to `http://localhost:5601` for `kibana`.
 `http://localhost:5601/app/home#/`
 
 ![img](./assets/kibana2.png)
+
+### Metricebeat Service (metricbeat01)
+
+`Metricbeat` is dependent on `ES01` and `Kibana` nodes being healthy before starting. We have enabled four modules for gathering metrics including Elasticsearch, Kibana, Logstash, and Docker. This means, once we verify Metricbeat is up, we can hop into Kibana and navigate to “Stack Monitoring” to see how things look.
+http://localhost:5601/app/monitoring
+
+![img](./assets/metricbeat1.png)
+
+## Details <a name="details"></a>
 
 ### Images
 
