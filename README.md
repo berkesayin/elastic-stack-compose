@@ -1,13 +1,13 @@
 # Running Elastic Stack Tools Using Docker Compose
 
-## Contents
+## Contents
 
-- [Elastic Stack Tools](#elastic-stack)
+- [Elastic Stack](#elastic-stack)
 - [Compose Configuration And Usage](#compose)
 - [Services](#services)
 - [Details](#details)
 
-## Elastic Stack <a name="elastic-stack"></a>
+## Elastic Stack <a name="elastic-stack"></a>
 
 The Elastic tools used for this application:
 
@@ -29,7 +29,7 @@ The Elastic tools used for this application:
 └── metricbeat.yml
 ```
 
-## Compose Configuration And Usage <a name="compose"></a>
+## Compose Configuration And Usage <a name="compose"></a>
 
 As of 8.0, security is enabled by default. `setup-c` container is used here to make sure the certificate CA setup is established correctly. Having `security enabled` is a recommended practice and should not be disabled.
 
@@ -52,7 +52,7 @@ docker compose up --build
 
 The `setup-c` container exits on purpose after it completes generating the certs and passwords.
 
-### Elasticsearch Service (es01)
+### Elasticsearch Service (es01)
 
 Copy the `ca.crt` out of the `es01-c` container:
 
@@ -115,13 +115,19 @@ http://localhost:5601/app/monitoring
 
 ![img](./assets/metricbeat1.png)
 
-### Filebeat Service (filebeat01)
+### Filebeat Service (filebeat01)
 
 http://localhost:5601/app/logs/stream
 
 ![img](./assets/filebeat1.png)
 
+### Logstash Service (logstash01)
+
+Logstash service...
+
 ## Details <a name="details"></a>
+
+Here are the details for the images, containers, networks, and volumes used for the application.
 
 ### Images
 
@@ -130,7 +136,12 @@ docker images
 ```
 
 ```sh
-
+REPOSITORY                                      TAG        IMAGE ID         CREATED          SIZE
+docker.elastic.co/kibana/kibana                 8.7.1      b6fb473d4163     12 months ago    826MB
+docker.elastic.co/elasticsearch/elasticsearch   8.7.1      1c46ca52228b     12 months ago    744MB
+docker.elastic.co/beats/metricbeat              8.7.1      8efe3a73b9fc     12 months ago    297MB
+docker.elastic.co/beats/filebeat                8.7.1      ff45b2969cfe     12 months ago    268MB
+docker.elastic.co/logstash/logstash             8.7.1      09b51d8266ff     12 months ago    715MB
 ```
 
 ### Network
@@ -140,7 +151,8 @@ docker network ls
 ```
 
 ```sh
-
+NETWORK ID     NAME        DRIVER    SCOPE
+c94f41a7ddba   elastic     bridge    local
 ```
 
 ### Volumes
@@ -150,7 +162,13 @@ docker volume ls
 ```
 
 ```sh
-
+DRIVER    VOLUME NAME
+local     elastic-stack-compose_certs
+local     elastic-stack-compose_esdata01
+local     elastic-stack-compose_filebeatdata01
+local     elastic-stack-compose_kibanadata
+local     elastic-stack-compose_logstashdata01
+local     elastic-stack-compose_metricbeatdata01
 ```
 
 ### Containers
@@ -167,13 +185,21 @@ docker ps
 ```
 
 ```sh
-
+CONTAINER ID   IMAGE                                                 COMMAND                  CREATED          STATUS                   PORTS                              NAMES
+cee89428d2db   docker.elastic.co/logstash/logstash:8.7.1             "/usr/local/bin/dock…"   7 minutes ago    Up 6 minutes             5044/tcp, 9600/tcp                 logstash01-c
+b98eff0a0c25   docker.elastic.co/beats/filebeat:8.7.1                "/usr/bin/tini -- /u…"   16 minutes ago   Up 6 minutes                                                filebeat01-c
+08d2ed88c696   docker.elastic.co/beats/metricbeat:8.7.1              "/usr/bin/tini -- /u…"   34 minutes ago   Up 6 minutes                                                metricbeat01-c
+f30146ca4013   docker.elastic.co/kibana/kibana:8.7.1                 "/bin/tini -- /usr/l…"   53 minutes ago   Up 6 minutes (healthy)   0.0.0.0:5601->5601/tcp             kibana-c
+207c59318a7e   docker.elastic.co/elasticsearch/elasticsearch:8.7.1   "/bin/tini -- /usr/l…"   2 hours ago      Up 7 minutes (healthy)   0.0.0.0:9200->9200/tcp, 9300/tcp   es01-c
 ```
+
+Additionally, the `setup-c` container starts and stops.
 
 ```sh
-docker ps -a
+CONTAINER ID   IMAGE                                                 COMMAND                  CREATED          STATUS                     PORTS         NAMES
+19b1dff38e9f   docker.elastic.co/elasticsearch/elasticsearch:8.7.1   "/bin/tini -- /usr/l…"   2 hours ago      Exited (0) 7 minutes ago                 setup-c
 ```
 
-```sh
-
-```
+References:
+https://www.docker.elastic.co/
+https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose
