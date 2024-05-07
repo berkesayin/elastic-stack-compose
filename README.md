@@ -39,7 +39,7 @@ Build and run the application:
 docker compose up --build
 ```
 
-## Services <a name="services"></a>
+## Services <a name="services"></a>
 
 - setup
 - es01
@@ -201,5 +201,5 @@ CONTAINER ID   IMAGE                                                 COMMAND    
 ```
 
 References:
-https://www.docker.elastic.co/
+https://www.docker.elastic.co/ <br />
 https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose
