@@ -103,16 +103,23 @@ Navigate to `http://localhost:5601` for `kibana`.
 
 ![img](./assets/kibana1.png)
 
-`http://localhost:5601/app/home#/`
+http://localhost:5601/app/home#
 
 ![img](./assets/kibana2.png)
 
 ### Metricebeat Service (metricbeat01)
 
 `Metricbeat` is dependent on `ES01` and `Kibana` nodes being healthy before starting. We have enabled four modules for gathering metrics including Elasticsearch, Kibana, Logstash, and Docker. This means, once we verify Metricbeat is up, we can hop into Kibana and navigate to “Stack Monitoring” to see how things look.
+
 http://localhost:5601/app/monitoring
 
 ![img](./assets/metricbeat1.png)
+
+### Filebeat Service (filebeat01)
+
+http://localhost:5601/app/logs/stream
+
+![img](./assets/filebeat1.png)
 
 ## Details <a name="details"></a>
 
