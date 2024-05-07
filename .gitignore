@@ -11,3 +11,5 @@
 
 # development notes
 notes/
+
+.env
