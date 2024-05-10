@@ -2,12 +2,12 @@
 
 ## Contents
 
-- [Elastic Stack](#elastic-stack)
-- [Compose Configuration And Usage](#compose)
-- [Services](#services)
-- [Details](#details)
+1. [Elastic Stack](#elastic-stack)
+2. [Compose Configuration And Usage](#compose)
+3. [Services](#services)
+4. [Details](#details)
 
-## Elastic Stack <a name="elastic-stack"></a>
+## 1. Elastic Stack <a name="elastic-stack"></a>
 
 The Elastic tools used for this application:
 
@@ -29,7 +29,7 @@ The Elastic tools used for this application:
 └── metricbeat.yml
 ```
 
-## Compose Configuration And Usage <a name="compose"></a>
+## 2. Compose Configuration And Usage <a name="compose"></a>
 
 As of 8.0, security is enabled by default. `setup-c` container is used here to make sure the certificate CA setup is established correctly. Having `security enabled` is a recommended practice and should not be disabled.
 
@@ -39,7 +39,7 @@ Build and run the application:
 docker compose up --build
 ```
 
-## Services <a name="services"></a>
+## 3. Services <a name="services"></a>
 
 - setup
 - es01
@@ -125,7 +125,7 @@ http://localhost:5601/app/logs/stream
 
 Logstash service...
 
-## Details <a name="details"></a>
+## 4. Details <a name="details"></a>
 
 Here are the details for the images, containers, networks, and volumes used for the application.
 
@@ -201,5 +201,6 @@ CONTAINER ID   IMAGE                                                 COMMAND    
 ```
 
 References:
-https://www.docker.elastic.co/ <br />
-https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose
+
+- https://www.docker.elastic.co/
+- https://www.elastic.co/blog/getting-started-with-the-elastic-stack-and-docker-compose
